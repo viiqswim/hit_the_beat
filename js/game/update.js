@@ -19,7 +19,7 @@ var Update = function() {
             change_lane_notes_color(lane_2_balls, colors['gold']);
             change_lane_notes_color(lane_3_balls, colors['gold']);
         } else {
-            // change_lane_notes_color(lane_1_balls, colors['note_colors']['green']);
+            change_lane_notes_color(lane_1_balls, colors['note_colors']['green']);
             change_lane_notes_color(lane_2_balls, colors['note_colors']['red']);
             change_lane_notes_color(lane_3_balls, colors['note_colors']['blue']);
         }
