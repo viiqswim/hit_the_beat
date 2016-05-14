@@ -30,7 +30,7 @@ var Menu = {
 
         set_full_screen();
         set_background(world_dimensions);
-        test.create_song_chart();
+        test.create_song_menu();
         loading_screen.destroy_loading_screen();
     },
 
@@ -48,8 +48,48 @@ var Menu = {
 
 var Test = function() {
     var buttons = [];
+    var buttons_vertical_position;
 
-    function create_buttons(number_of_splits, button_positions, start_song_function) {
+    this.create_song_menu = function create_song_menu() {
+        create_song_section("Passenger - Let Her Go", "passenger-let_her_go", true);
+        create_song_section("Avicii - The Nights", "avicii-the_nights");
+        create_song_section("The Script - Breakeven", "the-script-breakeven");
+        create_song_section("Justin Bieber - Sorry", "justin-bieber-sorry");
+    }
+
+    function create_song_section(display_name, code_name, first_song_in_menu) {
+        var number_of_splits = 3;
+        var split_dimensions = get_vertical_screen_splits(number_of_splits);
+        var split_middle_offset = ((split_dimensions[0]['split_end_coordinate']) / 2);
+        var world_dimensions = {
+            w: game.world.bounds['width'],
+            h: game.world.bounds['height']
+        };
+
+        var button_width = (world_dimensions['w'] / 3) - 50;
+        if (button_width > 150) {
+            button_width = 150;
+        }
+        var button_height = (button_width / 3);
+        var button_dimensions = {
+            'w': button_width,
+            'h': button_height,
+        };
+
+        if (first_song_in_menu) {
+            buttons_vertical_position = world_dimensions['h'] / 8;
+        } else {
+            buttons_vertical_position = buttons_vertical_position + (world_dimensions['h'] / 5.5);
+        }
+
+        button_positions = calculate_button_positions(buttons_vertical_position, button_dimensions);
+        test.add_song_option(display_name, code_name, number_of_splits, button_positions, button_dimensions, function() {
+            song.current_song = code_name;
+            game_state_manager.start_game();
+        });
+    }
+
+    this.create_buttons = function create_buttons(number_of_splits, button_positions, start_song_function) {
         var buttons = [];
         buttons.push(
             game.add.button(button_positions[0]['w'], button_positions[0]['h'],
@@ -74,7 +114,7 @@ var Test = function() {
         return buttons
     }
 
-    function add_song_option(display_name, song_code, number_of_splits, button_positions, button_dimensions, start_song_function) {
+    this.add_song_option = function add_song_option(display_name, song_code, number_of_splits, button_positions, button_dimensions, start_song_function) {
         var style = { font: "16px Arial", align: "center", fill: "#fff", backgroundColor: "#000" };
         var song_name_position = {
             x: game.world.bounds['width'] / 2,
@@ -95,60 +135,4 @@ var Test = function() {
         buttons = test.create_buttons(number_of_splits, button_positions, start_song_function);
         adjust_button_dimensions(buttons, button_dimensions);
     }
-
-    function create_song_chart() {
-        var number_of_splits = 3;
-        var split_dimensions = get_vertical_screen_splits(number_of_splits);
-        var split_middle_offset = ((split_dimensions[0]['split_end_coordinate']) / 2);
-        var world_dimensions = {
-            w: game.world.bounds['width'],
-            h: game.world.bounds['height']
-        };
-
-        var button_width = (world_dimensions['w'] / 3) - 50;
-        if (button_width > 150) {
-            button_width = 150;
-        }
-        var button_height = (button_width / 3);
-        var button_dimensions = {
-            'w': button_width,
-            'h': button_height,
-        };
-
-        buttons_vertical_position = world_dimensions['h'] / 8;
-        button_positions = calculate_button_positions(buttons_vertical_position, button_dimensions);
-        test.add_song_option("Passenger - Let Her Go", "passenger-let_her_go", number_of_splits, button_positions, button_dimensions, function() {
-            song.current_song = 'passenger-let_her_go';
-            game_state_manager.start_game();
-        });
-
-        buttons_vertical_position = buttons_vertical_position + (world_dimensions['h'] / 5.5);
-        button_positions = calculate_button_positions(buttons_vertical_position, button_dimensions);
-        test.add_song_option("Avicii - The Nights", "avicii-the-nights", number_of_splits, button_positions, button_dimensions, function() {
-            song.current_song = 'avicii-the_nights';
-            game_state_manager.start_game();
-        });
-
-        buttons_vertical_position = buttons_vertical_position + (world_dimensions['h'] / 5.5);
-        button_positions = calculate_button_positions(buttons_vertical_position, button_dimensions);
-        test.add_song_option("The Script - Breakeven", "the-script-breakeven", number_of_splits, button_positions, button_dimensions, function() {
-            song.current_song = 'the-script-breakeven';
-            game_state_manager.start_game();
-        });
-
-        buttons_vertical_position = buttons_vertical_position + (world_dimensions['h'] / 5.5);
-        button_positions = calculate_button_positions(buttons_vertical_position, button_dimensions);
-        test.add_song_option("Justin Bieber - Sorry", "justin-bieber-sorry", number_of_splits, button_positions, button_dimensions, function() {
-            song.current_song = 'justin-bieber-sorry';
-            game_state_manager.start_game();
-        });
-    }
-
-    return {
-        create_buttons: create_buttons,
-        add_song_option: add_song_option,
-        create_song_chart: create_song_chart,
-    }
 }
-
-var test = new Test();

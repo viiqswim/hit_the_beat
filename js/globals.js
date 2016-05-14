@@ -31,3 +31,4 @@ var note_lanes = new NoteLanes();
 var emitters = new Emitters();
 var game_state_manager = new GameStateManager();
 var garbage_collector = new GarbageCollector();
+var test = new Test();
