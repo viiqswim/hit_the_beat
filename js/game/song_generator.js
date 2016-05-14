@@ -46,7 +46,7 @@ var SongGenerator = function() {
 
         var self = this;
         var current_note = song_data[0];
-        game.time.events.add(current_note['timing'], handle_note_creation, this, current_note);
+        game.time.events.add(current_note['timing'] + 0.27, handle_note_creation, this, current_note);
     }
 
     function handle_note_creation(current_note) {
