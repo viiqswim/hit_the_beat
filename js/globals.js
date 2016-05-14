@@ -13,19 +13,8 @@ var colors = {
     }
 };
 
-var current_song = '';
-var user_has_big_streak = false;
-
-var pause_click_area;
-
 var tappers = [];
 var invisible_tappers = [];
-var lane_1_balls = [];
-var lane_2_balls = [];
-var lane_3_balls = [];
-var background;
-
-var emitter;
 
 var create = new Create();
 var pause = new Pause();
@@ -38,3 +27,7 @@ var tapper = new Tapper();
 var update = new Update();
 var user_input = new UserInput();
 var loading_screen = new LoadingScreen();
+var note_lanes = new NoteLanes();
+var emitters = new Emitters();
+var game_state_manager = new GameStateManager();
+var garbage_collector = new GarbageCollector();

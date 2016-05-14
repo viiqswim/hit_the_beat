@@ -5,6 +5,8 @@ var Statistics = function() {
     var score;
     var granular_statistics;
 
+    var user_has_big_streak = false;
+
     // labels
     var score_number_label;
     var streak_text_label;
@@ -14,8 +16,12 @@ var Statistics = function() {
     var multiplier_number_label;
     var multiplier_text_label;
 
-    function initialize(options) {
+    this.initialize = function initialize(options) {
         init_variables();
+    };
+
+    this.get_user_has_big_streak = function() {
+        return user_has_big_streak;
     };
 
     function init_variables(options) {
@@ -48,27 +54,11 @@ var Statistics = function() {
         return true_percentage;
     };
 
-    function note_hit(hit_type) {
-        note_streak += 1;
-        increase_score(hit_type);
-        last_hit_type = hit_type;
-        check_display_encouraging_message(note_streak);
-        update_statistics();
-    };
-
-    function note_miss() {
-        user_has_big_streak = false;
-        check_boo_message(note_streak);
-        note_streak = 0;
-        last_hit_type = 0;
-        update_statistics();
-    };
-
     function check_boo_message(note_streak) {
         if (note_streak >= 50) {
             display_encouraging_message("Ouch", "");
         }
-    }
+    };
 
     function display_encouraging_message(big_message, small_message) {
         var coords = {
@@ -80,6 +70,8 @@ var Statistics = function() {
 
         var big_encourage = game.add.text(coords['x'], coords['y'], big_message, big_style);
         var small_encourage = game.add.text(coords['x'], coords['y'] + 30, small_message, small_style);
+        garbage_collector.add_object(big_encourage);
+        garbage_collector.add_object(small_encourage);
 
         big_encourage.anchor.setTo(0.5, 0.5);
         small_encourage.anchor.setTo(0.5, 0.5);
@@ -91,7 +83,7 @@ var Statistics = function() {
             game.add.tween(small_encourage).to({ alpha: 0 }, 250, Phaser.Easing.Linear.None, true);
         }, this);
 
-    }
+    };
 
     function increase_score(hit_type) {
         score += (100 * hit_type) * get_streak_multiplier();
@@ -123,11 +115,10 @@ var Statistics = function() {
             display_encouraging_message("4X", "Killing it");
         } else if (note_streak == 50) {
             user_has_big_streak = true;
+            note_lanes.change_note_big_streak_color();
             display_encouraging_message("8X", "You're on fire!");
-        } else if (note_streak == 0) {
-            display_encouraging_message("Ouch", "");
         }
-    }
+    };
 
     function interpret_hit_type() {
         switch (last_hit_type) {
@@ -156,7 +147,26 @@ var Statistics = function() {
         }
     };
 
-    function update_statistics() {
+    this.update_statistics = function update_statistics(user_hit_note, hit_type) {
+        update_statistics_data(user_hit_note, hit_type);
+        update_statistics_text_labels();
+    };
+
+    function update_statistics_data(user_hit_note, hit_type) {
+        if (user_hit_note) {
+            check_display_encouraging_message(note_streak);
+            note_streak += 1;
+            increase_score(hit_type);
+            last_hit_type = hit_type;
+        } else {
+            check_boo_message(note_streak);
+            user_has_big_streak = false;
+            note_streak = 0;
+            last_hit_type = 0;
+        }
+    };
+
+    function update_statistics_text_labels() {
         var _note_streak = note_streak.toString();
         var _multiplier = get_streak_multiplier().toString();
         var _score = score.toString();
@@ -167,13 +177,14 @@ var Statistics = function() {
         var _missed_notes = granular_statistics['missed_notes'].toString();
         var _accuracy = get_accuracy().toString();
 
+
         score_number_label.setText(_score);
         streak_number_label.setText(_note_streak);
         accuracy_number_label.setText(_accuracy + "");
         multiplier_number_label.setText(_multiplier + "x");
     };
 
-    function create_display_text() {
+    this.create_display_text = function create_display_text() {
         var coords = {
             x: game.world.bounds['width'] / 2,
             y: 25
@@ -197,6 +208,15 @@ var Statistics = function() {
         multiplier_number_label = game.add.text(coords['x'] - space, side_scores_space + 100, '1x', side_score_style);
         multiplier_text_label = game.add.text(coords['x'] - space, side_scores_space + 100 + text_space, 'Multiplier', side_text_style);
 
+        garbage_collector.add_object(score_number_label);
+        garbage_collector.add_object(streak_number_label);
+        garbage_collector.add_object(streak_text_label);
+        garbage_collector.add_object(accuracy_number_label);
+        garbage_collector.add_object(accuracy_text_label);
+        garbage_collector.add_object(multiplier_number_label);
+        garbage_collector.add_object(multiplier_text_label);
+        
+
         score_number_label.anchor.setTo(0.5, 0.5);
         streak_text_label.anchor.setTo(0.5, 0.5);
         streak_number_label.anchor.setTo(0.5, 0.5);
@@ -204,12 +224,5 @@ var Statistics = function() {
         accuracy_number_label.anchor.setTo(0.5, 0.5);
         multiplier_number_label.anchor.setTo(0.5, 0.5);
         multiplier_text_label.anchor.setTo(0.5, 0.5);
-    }
-
-    return {
-        initialize: initialize,
-        note_hit: note_hit,
-        note_miss: note_miss,
-        create_display_text: create_display_text,
-    }
+    };
 }

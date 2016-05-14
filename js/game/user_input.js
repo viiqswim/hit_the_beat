@@ -1,5 +1,5 @@
 var UserInput = function() {
-    function register_keys() {
+    this.register_keys = function register_keys() {
         //  Register the keys.
         this.a_key = game.input.keyboard.addKey(Phaser.Keyboard.A);
         this.s_key = game.input.keyboard.addKey(Phaser.Keyboard.S);
@@ -37,11 +37,11 @@ var UserInput = function() {
         game.input.addPointer();
         game.input.addPointer();
         game.input.addPointer();
-    }
+    };
 
-    function handle_mobile_events() {
+    this.handle_mobile_events = function handle_mobile_events() {
         game.input.onDown.add(handle_tap_event, this);
-    }
+    };
 
     function handle_tap_event(pointer) {
         if (is_in_range(pointer.position, invisible_tappers[0])) {
@@ -50,13 +50,8 @@ var UserInput = function() {
             tapper.lane_2_button_press();
         } else if (is_in_range(pointer.position, invisible_tappers[2])) {
             tapper.lane_3_button_press();
-        } else if(is_in_range(pointer.position, pause_click_area)) {
+        } else if(is_in_range(pointer.position, pause.pause_click_area)) {
         	pause.handle_pause_attempt();
         }
-    }
-
-    return {
-    	register_keys: register_keys,
-    	handle_mobile_events: handle_mobile_events,
-    }
+    };
 };

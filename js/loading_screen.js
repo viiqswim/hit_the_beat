@@ -8,6 +8,7 @@ var LoadingScreen = function() {
             game.world.bounds['height'] / 2,
             loading_text, { font: '40px Arial', fill: '#ffffff' }
         );
+        garbage_collector.add_object(loading_label);
         var text_width = game.world.bounds['width'] - 150;
         if (text_width > 500) {
             text_width = 500;

@@ -1,17 +1,15 @@
 var Tapper = function() {
-    var possible_
+    this.lane_1_button_press = function lane_1_button_press() {
+        handle_tapper_press(note_lanes.get_lane_1(), tappers[0]);
+    };
 
-    function lane_1_button_press() {
-        handle_tapper_press(lane_1_balls, tappers[0]);
-    }
+    this.lane_2_button_press = function lane_2_button_press() {
+        handle_tapper_press(note_lanes.get_lane_2(), tappers[1]);
+    };
 
-    function lane_2_button_press() {
-        handle_tapper_press(lane_2_balls, tappers[1]);
-    }
-
-    function lane_3_button_press() {
-        handle_tapper_press(lane_3_balls, tappers[2]);
-    }
+    this.lane_3_button_press = function lane_3_button_press() {
+        handle_tapper_press(note_lanes.get_lane_3(), tappers[2]);
+    };
 
     function handle_tapper_press(lane_notes, tapper) {
         var tapper_coords = get_center_coords(tapper.getBounds());
@@ -20,25 +18,24 @@ var Tapper = function() {
         var note_coords;
 
         if (lane_notes.length == 0) {
-            handle_missed_note(tapper);
+            handle_missed_note(null, tapper);
             return;
         }
 
         note = lane_notes[note_index];
-        note_coords = get_center_coords(note.getBounds());
+        note_coords = get_center_coords(note.get_note().getBounds());
 
         var hit_type = get_hit_type(note_coords, tapper_coords, tapper);
         if (hit_type !== 0) {
+            note.note_hit(hit_type);
             note.destroy();
             lane_notes.splice(0, 1);
-            statistics.note_hit(hit_type);
-            particleBurst(note_coords);
         } else {
-            handle_missed_note(tapper);
+            handle_missed_note(note, tapper);
         }
-    }
+    };
 
-    function remove_missed_notes(lane_notes, tapper) {
+    this.remove_missed_notes = function remove_missed_notes(lane_notes, tapper) {
         var tapper_coords = get_center_coords(tapper.getBounds());
 
 
@@ -47,25 +44,25 @@ var Tapper = function() {
                 return;
             }
 
-            note_coords = get_center_coords(note.getBounds());
+            note_coords = get_center_coords(note.get_note().getBounds());
 
-            exeeds = exeeds_possible_hit_boundary(note_coords, tapper_coords);
-            if (exeeds) {
-                handle_missed_note(tapper);
+            exeeds_boundary = exeeds_possible_hit_boundary(note_coords, tapper_coords);
+            if (exeeds_boundary) {
+                handle_missed_note(note, tapper);
                 lane_notes.splice(0, 1);
             } else {
                 return;
             }
         });
-    }
+    };
 
     function exeeds_possible_hit_boundary(note_coords, tapper_coords) {
-        if ((tapper_coords['y'] + 56) < note_coords['y']) {
+        if (note_coords['y'] > (tapper_coords['y'] + 56)) {
             return true;
         }
 
         return false;
-    }
+    };
 
     function get_hit_type(note_coords, tapper_coords, tapper) {
         if (note_coords['y'] >= (tapper_coords['y'] - 15) && note_coords['y'] <= (tapper_coords['y'] + 15)) {
@@ -80,23 +77,19 @@ var Tapper = function() {
         } else {
             return 0
         }
-    }
+    };
 
-    function handle_missed_note(tapper) {
-        statistics.note_miss();
+    function handle_missed_note(note, tapper) {
+        if(note === null || note === undefined) {
+            statistics.update_statistics(false);
+            return;
+        }
+
+        note.note_miss();
         change_tapper_color(colors['red'], tapper);
-    }
+    };
 
     function change_tapper_color(color, tapper) {
         tapper.tint = color;
-    }
-
-    return {
-        lane_1_button_press: lane_1_button_press,
-        lane_2_button_press: lane_2_button_press,
-        lane_3_button_press: lane_3_button_press,
-        remove_missed_notes: remove_missed_notes,
-        get_hit_type: get_hit_type,
-
-    }
+    };
 };

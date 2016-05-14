@@ -68,6 +68,7 @@ var Test = function() {
         for (var i = 0; i < buttons.length; i++) {
             buttons[i].anchor.set(0.5);
             buttons[i].tint = colors['white'];
+            garbage_collector.add_object(buttons[i]);
         }
 
         return buttons
@@ -86,6 +87,7 @@ var Test = function() {
         var song_name_height = song_name_width / 8;
 
         var text = game.add.text(song_name_position['x'], song_name_position['y'], display_name, style);
+        garbage_collector.add_object(text);
         text.width = song_name_width;
         text.height = song_name_height;
         text.anchor.set(0.5);
@@ -116,29 +118,29 @@ var Test = function() {
         buttons_vertical_position = world_dimensions['h'] / 8;
         button_positions = calculate_button_positions(buttons_vertical_position, button_dimensions);
         test.add_song_option("Passenger - Let Her Go", "passenger-let_her_go", number_of_splits, button_positions, button_dimensions, function() {
-            current_song = 'passenger-let_her_go';
-            game.state.start('game');
+            song.current_song = 'passenger-let_her_go';
+            game_state_manager.start_game();
         });
 
         buttons_vertical_position = buttons_vertical_position + (world_dimensions['h'] / 5.5);
         button_positions = calculate_button_positions(buttons_vertical_position, button_dimensions);
         test.add_song_option("Avicii - The Nights", "avicii-the-nights", number_of_splits, button_positions, button_dimensions, function() {
-            current_song = 'avicii-the_nights';
-            game.state.start('game');
+            song.current_song = 'avicii-the_nights';
+            game_state_manager.start_game();
         });
 
         buttons_vertical_position = buttons_vertical_position + (world_dimensions['h'] / 5.5);
         button_positions = calculate_button_positions(buttons_vertical_position, button_dimensions);
         test.add_song_option("The Script - Breakeven", "the-script-breakeven", number_of_splits, button_positions, button_dimensions, function() {
-            current_song = 'the-script-breakeven';
-            game.state.start('game');
+            song.current_song = 'the-script-breakeven';
+            game_state_manager.start_game();
         });
 
         buttons_vertical_position = buttons_vertical_position + (world_dimensions['h'] / 5.5);
         button_positions = calculate_button_positions(buttons_vertical_position, button_dimensions);
         test.add_song_option("Justin Bieber - Sorry", "justin-bieber-sorry", number_of_splits, button_positions, button_dimensions, function() {
-            current_song = 'justin-bieber-sorry';
-            game.state.start('game');
+            song.current_song = 'justin-bieber-sorry';
+            game_state_manager.start_game();
         });
     }
 

@@ -9,7 +9,7 @@ var Preload = function() {
         preload.preload_gif();
         preload.preload_png();
         preload.preload_audio();
-    }
+    };
 
     this.preload_jpg = function preload_jpg() {
         game.load.image('background', 'assets/misc/starfield.jpg');
@@ -35,13 +35,13 @@ var Preload = function() {
         // Jerking in a rythm game where timing is of utter importance is BAD!
 
         //  Firefox doesn't support mp3 files, so use ogg
-        if (current_song == 'avicii-the_nights') {
+        if (song.current_song == 'avicii-the_nights') {
             game.load.audio('avicii-the_nights', [directory + 'avicii-the_nights.mp3', directory + 'avicii-the_nights.ogg']);
-        } else if (current_song == 'passenger-let_her_go') {
+        } else if (song.current_song == 'passenger-let_her_go') {
             game.load.audio('passenger-let_her_go', [directory + 'passenger-let_her_go.mp3', directory + 'passenger-let_her_go.ogg']);
-        } else if (current_song == 'justin-bieber-sorry') {
+        } else if (song.current_song == 'justin-bieber-sorry') {
             game.load.audio('justin-bieber-sorry', [directory + 'justin-bieber-sorry.mp3', directory + 'justin-bieber-sorry.ogg']);
-        } else if (current_song == 'the-script-breakeven') {
+        } else if (song.current_song == 'the-script-breakeven') {
             game.load.audio('the-script-breakeven', [directory + 'the-script-breakeven.mp3', directory + 'the-script-breakeven.ogg']);
         }
     };
@@ -53,6 +53,8 @@ var Preload = function() {
             game.world.bounds['height'] / 2,
             loading_text, { font: '40px Arial', fill: '#ffffff' }
         );
+        garbage_collector.add_object(loading_label);
+
         var text_width = game.world.bounds['width'] - 150;
         if (text_width > 500) {
             text_width = 500;
@@ -65,7 +67,7 @@ var Preload = function() {
 
     this.destroy_loading_text = function destroy_loading_text() {
         loading_label.destroy();
-    }
+    };
 
     function update_loading_text() {
         // finds number of periods (".") in the loading text
@@ -88,5 +90,5 @@ var Preload = function() {
 
         loading_label.setText(loading_text);
         game.time.events.add(500, update_loading_text, this);
-    }
+    };
 };

@@ -40,9 +40,8 @@ function set_full_screen() {
 
 function set_background(world_dimensions) {
     game.stage.backgroundColor = '#182d3b';
-    background = game.add.tileSprite(0, 0, world_dimensions['w'], world_dimensions['h'], 'background');
-
-    return background;
+    var background = game.add.tileSprite(0, 0, world_dimensions['w'], world_dimensions['h'], 'background');
+    garbage_collector.add_object(background);
 }
 
 function get_vertical_screen_splits(number_of_splits) {
@@ -123,10 +122,10 @@ function create_tappers(number_of_splits, button_positions) {
             'tapper_white', null, this)
     );
 
-
     for (var i = 0; i < tappers.length; i++) {
         tappers[i].anchor.set(0.5);
         tappers[i].tint = colors['white'];
+        garbage_collector.add_object(tappers[i]);
     }
 
     return tappers;
@@ -151,6 +150,7 @@ function create_invisible_tappers(number_of_splits, button_positions) {
         // people don't miss it so easily
         invisible_tappers[i].width = 120;
         invisible_tappers[i].height = 150;
+        garbage_collector.add_object(invisible_tappers[i]);
     }
 
     return invisible_tappers;
