@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Music Game</title>
+    <meta name="description" content="The HTML5 Herald">
+    <meta name="author" content="SitePoint">
+    <link rel="stylesheet" href="css/styles.css">
+    <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+    <div id="timing">
+        <button id="stop">Stop Song</button>
+        <div id="output"></div>
+    </div>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="http://underscorejs.org/underscore-min.js"></script>
+    <script type="text/javascript" src="http://backbonejs.org/backbone-min.js"></script>
+    <script>
+    var GameContainer = Backbone.View.extend({
+        initialize: function(options) {
+            this.sound = new Sound("../justin-bieber-sorry.mp3", 100, false);
+            this.sound.start();
+            startstoptimer();
+
+            this.init_object_variables();
+            this.bind_window_keydown_event();
+        },
+
+        init_object_variables: function() {
+            var self = this;
+            this.all_notes = [];
+            this.last_two_notes_timing = [0, 0];
+        },
+
+        events: {
+            'keydown': 'handle_key_press',
+            'click #stop': 'stop_song',
+        },
+
+        stop_song: function() {
+            var parsed_json = this.all_notes.toString();
+            this.$el.find('#output').html(parsed_json);
+            this.sound.stop();
+        },
+
+        handle_key_press: function(ev) {
+            var code = ev.keyCode || ev.which;
+
+            this.all_notes.push(this.new_note());
+        },
+
+        new_note: function() {
+            var scale = Math.floor(Math.random() * 3) + 0
+            var all_notes = this.all_notes
+            var last_note_index = all_notes.length - 1;
+            this.last_two_notes_timing[0] = this.last_two_notes_timing[1];
+            this.last_two_notes_timing[1] = show_total();
+            var note_diff = this.last_two_notes_timing[1] - this.last_two_notes_timing[0];
+            console.log(note_diff);
+            console.log(all_notes);
+            console.log(all_notes[last_note_index]);
+            console.log(all_notes[last_note_index - 1]);
+
+            var json = {
+                scale: scale,
+                timing: note_diff
+            };
+            return JSON.stringify(json);
+        },
+
+        bind_window_keydown_event: function() {
+            _.bindAll(this, 'handle_key_press');
+            $(document).bind('keydown', this.handle_key_press);
+        },
+    });
+
+
+
+    function Sound(source, volume, loop) {
+        this.source = source;
+        this.volume = volume;
+        this.loop = loop;
+        var son;
+        this.son = son;
+        this.finish = false;
+        this.stop = function() {
+            document.body.removeChild(this.son);
+        }
+        this.start = function() {
+            if (this.finish) return false;
+            this.son = document.createElement("embed");
+            this.son.setAttribute("src", this.source);
+            this.son.setAttribute("hidden", "true");
+            this.son.setAttribute("volume", this.volume);
+            this.son.setAttribute("autostart", "true");
+            this.son.setAttribute("loop", this.loop);
+            document.body.appendChild(this.son);
+        }
+        this.remove = function() {
+            document.body.removeChild(this.son);
+            this.finish = true;
+        }
+        this.init = function(volume, loop) {
+            this.finish = false;
+            this.volume = volume;
+            this.loop = loop;
+        }
+    }
+
+    var millisec = 0;
+    var seconds = 0;
+    var timer;
+    var total = 0;
+
+    function display() {
+        if (millisec >= 9) {
+            millisec = 0
+            seconds += 1
+        } else
+            millisec += 1
+        timer = setTimeout("display()", 100);
+    }
+
+    function show_total() {
+        var total = (seconds * 1000) + (millisec * 100);
+        console.log(total);
+
+        return total;
+    }
+
+    function starttimer() {
+        if (timer > 0) {
+            return;
+        }
+        display();
+    }
+
+    function stoptimer() {
+        clearTimeout(timer);
+        timer = 0;
+    }
+
+    function startstoptimer() {
+        if (timer > 0) {
+            clearTimeout(timer);
+            timer = 0;
+        } else {
+            display();
+        }
+    }
+
+    function resettimer() {
+        stoptimer();
+        millisec = 0;
+        seconds = 0;
+    }
+
+    var game_container = new GameContainer({
+        el: '#timing'
+    });
+    </script>
+</body>
+
+</html>
