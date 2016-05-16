@@ -4,7 +4,6 @@ var Emitters = function() {
     this.initialize = function() {
         // Particles used when a note is hit
         emitter = game.add.emitter(0, 0, 200);
-        garbage_collector.add_object(emitter);
         emitter.makeParticles('small_particle');
     }
 

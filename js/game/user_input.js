@@ -31,12 +31,6 @@ var UserInput = function() {
             Phaser.Keyboard.LEFT,
             Phaser.Keyboard.RIGHT
         ]);
-
-        // Add pointers (for mouse + fingers)
-        game.input.addPointer();
-        game.input.addPointer();
-        game.input.addPointer();
-        game.input.addPointer();
     };
 
     this.handle_mobile_events = function handle_mobile_events() {

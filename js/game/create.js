@@ -8,8 +8,6 @@ var Create = function() {
     };
 
     function preload_game_creation(callback) {
-        loading_screen.destroy_loading_screen();
-
         layout();
 
         user_input.register_keys();
@@ -23,7 +21,7 @@ var Create = function() {
     };
 
     function play_game() {
-        song.play();
+        song.play_song();
         song_generator.initialize(song.current_song);
         song_generator.play_next_song_note();
     };

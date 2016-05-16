@@ -38,7 +38,6 @@ var Tapper = function() {
     this.remove_missed_notes = function remove_missed_notes(lane_notes, tapper) {
         var tapper_coords = get_center_coords(tapper.getBounds());
 
-
         _.each(lane_notes, function(note) {
             if (note === null || note === undefined) {
                 return;

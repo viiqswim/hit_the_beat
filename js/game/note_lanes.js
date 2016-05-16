@@ -3,6 +3,12 @@ var NoteLanes = function() {
     var lane_2 = [];
     var lane_3 = [];
 
+    this.initialize = function initialize() {
+        lane_1 = [];
+        lane_2 = [];
+        lane_3 = [];
+    }
+
     this.get_lane_1 = function() {
         return lane_1;
     };
@@ -13,6 +19,18 @@ var NoteLanes = function() {
 
     this.get_lane_3 = function() {
         return lane_3;
+    };
+
+    this.set_lane_1 = function(_lane) {
+        lane_1 = _lane;
+    };
+
+    this.set_lane_2 = function(_lane) {
+        lane_2 = _lane;
+    };
+
+    this.set_lane_3 = function(_lane) {
+        lane_3 = _lane;
     };
 
     this.change_note_regular_color = function change_note_regular_color() {

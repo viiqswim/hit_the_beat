@@ -26,6 +26,7 @@ var Statistics = function() {
 
     function init_variables(options) {
         note_streak = 0;
+        user_has_big_streak = false;
         score_multiplier = get_streak_multiplier();
         score = 0;
         granular_statistics = {
