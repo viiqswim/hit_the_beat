@@ -10,7 +10,6 @@ var Song = function() {
 
     this.play_song = function play() {
         music.play();
-        music.mute = true;
     };
 
     this.pause_song = function pause() {
