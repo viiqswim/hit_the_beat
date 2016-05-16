@@ -44,8 +44,6 @@ var UserInput = function() {
             tapper.lane_2_button_press();
         } else if (is_in_range(pointer.position, invisible_tappers[2])) {
             tapper.lane_3_button_press();
-        } else if(is_in_range(pointer.position, pause.pause_click_area)) {
-        	pause.handle_pause_attempt();
         }
     };
 };

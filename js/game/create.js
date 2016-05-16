@@ -12,7 +12,7 @@ var Create = function() {
 
         user_input.register_keys();
         user_input.handle_mobile_events();
-        pause.create_pause_button();
+        pause.create_pause_click_area();
         emitters.initialize();
 
         statistics.initialize();
